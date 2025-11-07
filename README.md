@@ -13,12 +13,36 @@ Each langua has its own set of automated tests, which are executed both in a loc
 /test/c/      -> C tests with CUnit
 /scripts/     -> Bash scripts for the pipeline
 
-## Pipeline flow
-Pending implementation
+## Bash scripts Description
+logger.sh       -> Defines the format and color of the log output
+log_config.sh   -> Creates the log directory and prepare the log file
+setup_env.sh    -> Install all required dependencies in the environment to run the python tests
+run_tests.sh    -> Execute all the python tests using pytest, generate the report and logs results
+cleanup_env.sh  -> Removes the python virtual environment and all th temporary files (keeping logs and reports)
+cleanup_logs.sh -> Deletes all the logs and report files
+build_all.sh    -> Run all the bash scripts (cleanup_logs -> setup_env -> run_tests -> cleanup_env)
 
-## Local excution
+## Pipeline flow
+build_all.sh
+  - cleanup_logs.sh
+  - setup_env.sh
+  - run_tests.sh
+  - cleanup_env.sh
+
+## Manual excution
 Python:
-    - In the root only run by console the pytest command
+    bash cleanup_logs.sh
+    bash setup_env.sh
+    bash run_tests.sh
+    bash cleanup_env.sh
+
+Requirements
+    - Linux environment
+    - Python 3.12+
+    - Bash 5.0+
+    - Installed packages:
+        - python3-venv
+        - python3-pip
 
 ## Docket
-Pending implementation
+To be implemented

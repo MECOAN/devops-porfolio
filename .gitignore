@@ -1,2 +1,10 @@
 __pycache__/
 *.pyc
+
+venv/
+
+logs/
+reports/
+
+build/
+dist

@@ -1,0 +1,43 @@
+name: Build and Test Pipeline
+
+on:
+    # Create the triggers for push and pull_request
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            # Make a checkout into the environment where the tests will be executed
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # Grant execution in all the bash scripts
+            - name: Make scripts executable
+              run: chmod +x scripts/*.sh
+
+            # Create the virtual environment, set it active and install all the dependencies
+            - name: Install dependencies
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y python3 python3-venv python3-pip
+                python3 -m pip install --upgrade pip pytest pytest-html
+
+            # Run the python tests with pytest and generate a report with html format
+            - name: Run local pipeline
+              run: |
+                echo "Building code"
+                bash scripts/build_all.sh
+
+              shell: bash
+
+            # Save the report as a pipeline artifact
+            - name: Upload test report artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: test-report
+                path: reports/report.html
